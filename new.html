@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 5px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #ccc;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+    </style>
+    <title>Tic Tac Toe</title>
+</head>
+
+<body>
+
+    <div id="board"></div>
+
+    <script>
+        const board = document.getElementById('board');
+        let currentPlayer = 'X';
+        let gameOver = false;
+
+        // Initialize the board
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.row = i;
+                cell.dataset.col = j;
+                cell.addEventListener('click', handleCellClick);
+                board.appendChild(cell);
+            }
+        }
+
+        function handleCellClick(event) {
+            if (gameOver) return;
+
+            const cell = event.target;
+            const row = cell.dataset.row;
+            const col = cell.dataset.col;
+
+            // Check if the cell is empty
+            if (!cell.textContent) {
+                cell.textContent = currentPlayer;
+                if (checkWinner(row, col)) {
+                    alert(`Player ${currentPlayer} wins!`);
+                    gameOver = true;
+                } else if (checkDraw()) {
+                    alert('It\'s a draw!');
+                    gameOver = true;
+                } else {
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                    // Computer's move
+                    makeComputerMove();
+                }
+            }
+        }
+
+        function makeComputerMove() {
+            if (gameOver) return;
+
+            // Implement Minimax algorithm for computer move
+            const bestMove = getBestMove();
+            const computerCell = document.querySelector(`[data-row="${bestMove.row}"][data-col="${bestMove.col}"]`);
+            computerCell.textContent = currentPlayer;
+
+            if (checkWinner(bestMove.row, bestMove.col)) {
+                alert(`Player ${currentPlayer} wins!`);
+                gameOver = true;
+            } else if (checkDraw()) {
+                alert('It\'s a draw!');
+                gameOver = true;
+            } else {
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            }
+        }
+
+        function getBestMove() {
+            // Implement Minimax algorithm logic here
+            // This is a placeholder, and you may need to replace it with your Minimax implementation.
+            // The function should return an object with `row` and `col` representing the best move.
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if (!document.querySelector(`[data-row="${i}"][data-col="${j}"]`).textContent) {
+                        return { row: i, col: j };
+                    }
+                }
+            }
+        }
+
+        function checkWinner(row, col) {
+            // Implement logic to check if the current move results in a win
+            // This is a placeholder, and you may need to replace it with your own logic.
+            return false;
+        }
+
+        function checkDraw() {
+            // Implement logic to check if the game is a draw
+            // This is a placeholder, and you may need to replace it with your own logic.
+            return false;
+        }
+    </script>
+
+</body>
+
+</html>
